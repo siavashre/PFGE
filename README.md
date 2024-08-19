@@ -7,8 +7,8 @@ CRISPRCATCH has been tested on Ubuntu 20.04.
 This tool uses pre-developed tools and the user must install them before using this tool. These tool are:
 - [jluebeck/PrepareAA](https://github.com/jluebeck/PrepareAA) is mandatory and bashrc variable `$PreAA` should set to the directory you install PrepareAA. For adding this variable you can change your directory to where you install PrepareAA and run the following commands:
         
-        git clone https://github.com/jluebeck/PrepareAA
-        cd PrepareAA
+        git clone https://github.com/AmpliconSuite/AmpliconSuite-pipeline
+        cd AmpliconSuite-pipeline
         echo export PreAA=$PWD >> ~/.bashrc
         source ~/.bashrc
 - The [jluebeck/AmpliconArchitect](https://github.com/jluebeck/AmpliconArchitect) is mandatory and variable `$AA_SRC` should set in the bashrc. You can find more information about how to install AA and set `$AA_SRC` on the AA Github page.
@@ -30,7 +30,7 @@ After installing prerequisites, please clone the PFGE repo consider running the 
         source ~/.bashrc
         
 ## Testing
-To ensure that you installed all requiements correctly, you may download these two PFGE CRISPRCATCH test fastq files: [fastq1](https://drive.google.com/file/d/1iYOMtjag3mnZdw5Bqm2cdatE_OwJXFk3/view?usp=sharing) and [fastq2](https://drive.google.com/file/d/1-Vbj6lAsQtQyeXZyT2jZi08HiPT3uUaJ/view?usp=sharing). Then run the following command. If every things installed properly, after ~30 min the pipeline should generate the GBM39 amplicon structure.
+To ensure that you installed all requirements correctly, you may download these two PFGE CRISPRCATCH test fastq files: [fastq1](https://drive.google.com/file/d/1iYOMtjag3mnZdw5Bqm2cdatE_OwJXFk3/view?usp=sharing) and [fastq2](https://drive.google.com/file/d/1-Vbj6lAsQtQyeXZyT2jZi08HiPT3uUaJ/view?usp=sharing). Then run the following command. If every things installed properly, after ~30 min the pipeline should generate the GBM39 amplicon structure.
 
 `python3 wrapper.py -f1 /path/to/fastq1 -f2 /path/to/fastq2 -b i -sname GBM39 -o /path/to/output/dir -t 1 -r hg19 -bulk test_data/GBM39_AA_graph.txt -lmax 1370 -lmin 1200 -chr chr7 -g_start 55256396 -g_end 55256397`
 
