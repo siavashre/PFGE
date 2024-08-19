@@ -135,14 +135,15 @@ def quality_report(band):
 		csvwriter.writerows(lines)
 
 
-def run_AA(f1,f2,ref_v):
-	Pre_AA_cmd = "python3 {PrepareAA} --ref {ref_v} -t {thread} -s {name} --fastqs {f1} {f2} --no_filter --cngain 0 --cnsize_min 0 --cnv_bed {amplicon_bed_file} ".format(
-	PrepareAA = "$PreAA/PrepareAA.py" , ref_v= ref_v, thread = args.t, name = name , f1 = f1 , f2 = f2, amplicon_bed_file = amplicon_bed_file)
+def run_AA(f1,f2,ref_v,min_cn):
+	Pre_AA_cmd = "python3 {PrepareAA} --ref {ref_v} -t {thread} -s {name} --fastqs {f1} {f2} --no_filter --cngain {min_cn} --cnsize_min 0 --cnv_bed {amplicon_bed_file} ".format(
+	PrepareAA = "$PreAA/AmpliconSuite-pipeline.py" , ref_v= ref_v, thread = args.t, name = name , f1 = f1 , f2 = f2, min_cn = min_cn, amplicon_bed_file = amplicon_bed_file)
 	print(Pre_AA_cmd)
 	call(Pre_AA_cmd,shell=True)
 	if not os.path.exists(name+'_AA_results'):
 		os.mkdir(name+'_AA_results')
-	amplified_amplicon_cmd = '$AA_SRC/amplified_intervals.py --no_cstats --bed {bed} --bam {bam} --ref hg19 --cnsize_min 0 --gain 0 --out {out}'.format(bed=amplicon_bed_file,bam = name + '.cs.rmdup.bam', out= name + '_AA_CNV_SEEDS' )
+	amplified_amplicon_cmd = '$AA_SRC/amplified_intervals.py --no_cstats --bed {bed} --bam {bam} --ref hg19 --cnsize_min 0 --gain {min_cn} --out {out}'.format(
+		bed=amplicon_bed_file,bam = name + '.cs.rmdup.bam', min_cn = min_cn, out= name + '_AA_CNV_SEEDS' )
 	print(amplified_amplicon_cmd)
 	call(amplified_amplicon_cmd,shell=True)
 	bam_file = name+'.cs.rmdup.bam'
@@ -249,7 +250,8 @@ parser.add_argument("-g_start", "--g_start", help="Target cite starting position
 parser.add_argument("-g_end", "--g_end", help="Target cite end position in bp", required=True)
 parser.add_argument("-bed", "--bed", help="bed file describing amplicon region", required=False)
 parser.add_argument("-sdv", "--sdv", help="insert_sdev for running AA. Default is 8.5", required=False)
-parser.add_argument("-min_sup", "--min_sup", help="Minimum sup pair reads for calling discordant edges. Default is 2", required=False)
+parser.add_argument("-min_sup", "--min_sup", help="Minimum sup pair reads for calling discordant edges. Default is 2", required=False, type=int)
+parser.add_argument("-min_cn", "--min_cn", help="Minimum estimated CN to consider as a seed. Default is 0", required=False, type=float)
 args = parser.parse_args()
 
 
